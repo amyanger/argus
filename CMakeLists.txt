@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 project(argus
-    VERSION 0.15.1
+    VERSION 0.16.0
     DESCRIPTION "Game Boy Advance emulator (ARM7TDMI + scanline PPU + SDL2)"
     LANGUAGES C
 )
