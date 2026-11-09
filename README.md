@@ -1,8 +1,8 @@
 # Argus
 
-[![CI](https://github.com/amyanger/gba-emulator/actions/workflows/ci.yml/badge.svg)](https://github.com/amyanger/gba-emulator/actions/workflows/ci.yml)
-[![Release](https://github.com/amyanger/gba-emulator/actions/workflows/release.yml/badge.svg?event=push)](https://github.com/amyanger/gba-emulator/actions/workflows/release.yml)
-[![Latest release](https://img.shields.io/github/v/release/amyanger/gba-emulator?label=release)](https://github.com/amyanger/gba-emulator/releases/latest)
+[![CI](https://github.com/amyanger/argus/actions/workflows/ci.yml/badge.svg)](https://github.com/amyanger/argus/actions/workflows/ci.yml)
+[![Release](https://github.com/amyanger/argus/actions/workflows/release.yml/badge.svg?event=push)](https://github.com/amyanger/argus/actions/workflows/release.yml)
+[![Latest release](https://img.shields.io/github/v/release/amyanger/argus?label=release)](https://github.com/amyanger/argus/releases/latest)
 
 A Game Boy Advance emulator written from scratch in C, featuring **Hardware X-Ray Mode**: a real-time view of what the GBA hardware is actually doing while a game runs.
 
@@ -16,13 +16,13 @@ Built around an ARM7TDMI CPU interpreter, scanline-based PPU, and an SDL2 fronte
 
 ## Download
 
-Ready-to-run apps for **macOS** (Apple Silicon), **Windows** and **Linux** are on the [latest release](https://github.com/amyanger/gba-emulator/releases/latest). There's nothing else to install.
+Ready-to-run apps for **macOS** (Apple Silicon), **Windows** and **Linux** are on the [latest release](https://github.com/amyanger/argus/releases/latest). There's nothing else to install.
 
 > **New to GitHub?** Don't use the green **Code** button at the top of this page, and don't click **Source code (zip)** on the release page. Those download the program's source code, which you can't play. You want one of the files listed below.
 
 ### How to download
 
-1. Go to the [latest release](https://github.com/amyanger/gba-emulator/releases/latest).
+1. Go to the [latest release](https://github.com/amyanger/argus/releases/latest).
 2. Scroll down to **Assets**. If you don't see the files, click **Assets** to open the list.
 3. Click the file for your computer:
 

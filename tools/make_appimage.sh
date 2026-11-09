@@ -36,7 +36,7 @@ cp "$REPO/LICENSE" "$REPO/fonts/Inter-LICENSE.txt" "$WORK/AppDir/usr/share/doc/a
 
 # Update info lets AppImageUpdate fetch the latest release; appimagetool
 # makes the matching .zsync (needs zsyncmake on PATH), moved next to the AppImage.
-UPDATE_INFO="gh-releases-zsync|amyanger|gba-emulator|latest|argus-*-x86_64.AppImage.zsync"
+UPDATE_INFO="gh-releases-zsync|amyanger|argus|latest|argus-*-x86_64.AppImage.zsync"
 APPIMAGE="$OUT/argus-$VERSION-x86_64.AppImage"
 mkdir -p "$OUT"
 ARCH=x86_64 VERSION="$VERSION" "$WORK/appimagetool" -u "$UPDATE_INFO" "$WORK/AppDir" "$APPIMAGE"

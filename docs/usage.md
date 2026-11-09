@@ -4,7 +4,7 @@ Installing the downloads, command-line options, controls, headless mode, the lin
 
 ## Installing a pre-built binary
 
-Pre-built binaries for Linux (x86_64), macOS (Apple Silicon), and Windows (x86_64) are attached to every tagged release on the [Releases page](https://github.com/amyanger/gba-emulator/releases/latest).
+Pre-built binaries for Linux (x86_64), macOS (Apple Silicon), and Windows (x86_64) are attached to every tagged release on the [Releases page](https://github.com/amyanger/argus/releases/latest).
 
 Each download includes everything it needs, SDL2 included.
 

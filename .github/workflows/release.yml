@@ -105,7 +105,7 @@ jobs:
           APPIMAGE=$(realpath build/argus-*-x86_64.AppImage)
           chmod +x "$APPIMAGE"
           "$APPIMAGE" --appimage-updateinformation | tee update.log
-          grep -q "^gh-releases-zsync|amyanger|gba-emulator|latest|" update.log
+          grep -q "^gh-releases-zsync|amyanger|argus|latest|" update.log
           (cd "$RUNNER_TEMP" && "$APPIMAGE" --appimage-extract >/dev/null)
           ldd "$RUNNER_TEMP/squashfs-root/usr/bin/argus" | tee ldd.log
           grep -q "libSDL2.*squashfs-root" ldd.log || { echo "SDL2 not bundled"; exit 1; }
