@@ -16,7 +16,7 @@ static Library s_record;
 static LibView s_view;
 
 bool library_file_path(char* out, size_t out_size) {
-    char* dir = SDL_GetPrefPath("", "GBA Emulator");
+    char* dir = SDL_GetPrefPath("", "Argus");
     if (!dir) return false;
     int n = snprintf(out, out_size, "%slibrary.txt", dir);
     SDL_free(dir);

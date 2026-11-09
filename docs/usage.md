@@ -10,51 +10,51 @@ Each download includes everything it needs, SDL2 included.
 
 ### macOS (Apple Silicon, macOS 11 or newer)
 
-1. Download `gba_emulator-0.15.1-macOS-arm64.dmg` from the Releases page and open it.
-2. Drag **GBA Emulator** into **Applications**.
-3. Double-click **GBA Emulator**. The game library opens: click **Choose folder…** once to pick where you keep your games, then double-click one to play. You can also drop a ROM onto the app icon.
+1. Download `argus-0.15.1-macOS-arm64.dmg` from the Releases page and open it.
+2. Drag **Argus** into **Applications**.
+3. Double-click **Argus**. The game library opens: click **Choose folder…** once to pick where you keep your games, then double-click one to play. You can also drop a ROM onto the app icon.
 
-The app isn't signed with a paid Apple certificate, so the first launch is blocked with a message like *"GBA Emulator" Not Opened: Apple could not verify "GBA Emulator" is free of malware*. This is expected for unsigned apps and doesn't mean a virus was found. To allow it:
+The app isn't signed with a paid Apple certificate, so the first launch is blocked with a message like *"Argus" Not Opened: Apple could not verify "Argus" is free of malware*. This is expected for unsigned apps and doesn't mean a virus was found. To allow it:
 
 1. Click **Done** (not **Move to Trash**).
-2. Open **System Settings > Privacy & Security** and scroll down to the **Security** section. Next to *"GBA Emulator" was blocked to protect your Mac*, click **Open Anyway**.
+2. Open **System Settings > Privacy & Security** and scroll down to the **Security** section. Next to *"Argus" was blocked to protect your Mac*, click **Open Anyway**.
 3. Double-click the app again, click **Open Anyway** once more and type your Mac password if asked.
 
 You only need to do this once. Right-clicking the app and choosing **Open** no longer skips the check on macOS 15 and newer. From Terminal, this does the same:
 
 ```bash
-xattr -dr com.apple.quarantine "/Applications/GBA Emulator.app"
+xattr -dr com.apple.quarantine "/Applications/Argus.app"
 ```
 
 Saves are written next to the ROM. To use command-line options, run the binary inside the app:
 
 ```bash
-"/Applications/GBA Emulator.app/Contents/MacOS/GBA Emulator" path/to/rom.gba --scale 4
+"/Applications/Argus.app/Contents/MacOS/Argus" path/to/rom.gba --scale 4
 ```
 
 ### Linux (x86_64)
 
-1. Download `gba_emulator-0.15.1-x86_64.AppImage` from the Releases page.
-2. Make it executable: right-click it, open **Properties** and allow running it as a program, or run `chmod +x gba_emulator-0.15.1-x86_64.AppImage`.
+1. Download `argus-0.15.1-x86_64.AppImage` from the Releases page.
+2. Make it executable: right-click it, open **Properties** and allow running it as a program, or run `chmod +x argus-0.15.1-x86_64.AppImage`.
 3. Double-click it. The game library opens: click **Choose folder…** once to pick where you keep your games, then double-click one to play.
 
 The folder and file dialogs use `zenity` (GNOME and most desktops) or `kdialog` (KDE). If neither is installed, drop a `.gba` file on the library window, or pass the ROM on the command line:
 
 ```bash
-./gba_emulator-0.15.1-x86_64.AppImage path/to/rom.gba --scale 3
+./argus-0.15.1-x86_64.AppImage path/to/rom.gba --scale 3
 ```
 
 ### Windows (x86_64)
 
-1. Download `gba_emulator-0.15.1-Windows-AMD64.zip` from the Releases page and extract it.
-2. Double-click `gba_emulator.exe` in the `bin` folder. The game library opens: click **Choose folder…** once to pick where you keep your games, then double-click one to play. Dragging a ROM onto the `.exe` also works.
+1. Download `argus-0.15.1-Windows-AMD64.zip` from the Releases page and extract it.
+2. Double-click `argus.exe` in the `bin` folder. The game library opens: click **Choose folder…** once to pick where you keep your games, then double-click one to play. Dragging a ROM onto the `.exe` also works.
 
 Windows SmartScreen may warn that the app is from an unknown publisher, because it isn't signed with a paid certificate. Click **More info**, then **Run anyway**. Your browser may also flag the download as uncommon or unsafe for the same reason: in Edge or Chrome, open the downloads list, click the **...** next to the file and choose **Keep**.
 
 Command-line options still work from a terminal:
 
 ```
-gba_emulator-0.15.1-Windows-AMD64\bin\gba_emulator.exe path\to\rom.gba --scale 3
+argus-0.15.1-Windows-AMD64\bin\argus.exe path\to\rom.gba --scale 3
 ```
 
 ### Other platforms
@@ -79,7 +79,7 @@ The folder and the recently played list are kept in `library.txt` in the app's s
 ## Running from the command line
 
 ```bash
-./build/gba_emulator <rom_file> [options]
+./build/argus <rom_file> [options]
 ```
 
 ## Options
@@ -105,7 +105,7 @@ The folder and the recently played list are kept in `library.txt` in the app's s
 ## Example
 
 ```bash
-./build/gba_emulator roms/emerald.gba --bios bios/gba_bios.bin --scale 3
+./build/argus roms/emerald.gba --bios bios/gba_bios.bin --scale 3
 ```
 
 ## Controls
@@ -201,9 +201,9 @@ Bindings are saved to `keymap.ini` in the app's settings folder, next to `prefs.
 
 | OS | Folder |
 |----|--------|
-| macOS | `~/Library/Application Support/GBA Emulator/` |
-| Windows | `%APPDATA%\GBA Emulator\` |
-| Linux | `~/.local/share/GBA Emulator/` |
+| macOS | `~/Library/Application Support/Argus/` |
+| Windows | `%APPDATA%\Argus\` |
+| Linux | `~/.local/share/Argus/` |
 
 The file has one `NAME=value` line per button. Keyboard lines use the button name and an SDL key name. Controller lines add a `PAD_` prefix and use the SDL controller input name. The value `None` leaves a button unbound.
 
@@ -287,7 +287,7 @@ Run the emulator without an SDL window or audio output, writing one
 FNV-1a hash of the 240×160 framebuffer per frame:
 
 ```bash
-./gba_emulator <rom.gba> --headless --frames 240 --hash-out hashes.txt
+./argus <rom.gba> --headless --frames 240 --hash-out hashes.txt
 ```
 
 | Flag | Meaning |
@@ -346,10 +346,10 @@ Each window needs its own copy of the ROM, because the save, savestates and logs
 cp roms/emerald.gba roms/emerald-2.gba
 
 # Terminal 1 (host): opens the socket and waits for a peer.
-./build/gba_emulator roms/emerald.gba --link-master /tmp/gba.sock
+./build/argus roms/emerald.gba --link-master /tmp/gba.sock
 
 # Terminal 2 (client): connects to the host's socket.
-./build/gba_emulator roms/emerald-2.gba --link-client /tmp/gba.sock
+./build/argus roms/emerald-2.gba --link-client /tmp/gba.sock
 ```
 
 The host blocks at startup until the client connects. After both sides are up, in-game link interactions (Cable Club, trades, battles) cross between the two windows.

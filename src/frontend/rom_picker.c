@@ -37,5 +37,5 @@ bool rom_picker_take_launch_drop(char* out, size_t out_size) {
 }
 
 void rom_picker_alert(const char* message) {
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "GBA Emulator", message, NULL);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Argus", message, NULL);
 }

@@ -1,6 +1,7 @@
 #include "test_harness.h"
 #include "frontend/prefs.h"
 #include <stdio.h>
+#include <string.h>
 
 #define TEST_PATH "test_prefs.ini"
 
@@ -105,7 +106,37 @@ TEST(prefs_save_fails_on_bad_path) {
     ASSERT_TRUE(!prefs_load(&p));
 }
 
+static bool file_has(const char* path, const char* text) {
+    char buf[64] = "";
+    FILE* f = fopen(path, "r");
+    if (!f) return false;
+    bool ok = fgets(buf, sizeof(buf), f) && strcmp(buf, text) == 0;
+    fclose(f);
+    return ok;
+}
+
+TEST(prefs_migrate_moves_old_files_and_keeps_new_ones) {
+    FILE* f;
+    remove("mig_new_prefs.ini");
+    remove("mig_new_library.txt");
+    remove("mig_new_keymap.ini");
+    remove("mig_old_keymap.ini");
+    if ((f = fopen("mig_old_prefs.ini", "w"))) { fputs("old", f); fclose(f); }
+    if ((f = fopen("mig_old_library.txt", "w"))) { fputs("old", f); fclose(f); }
+    if ((f = fopen("mig_new_library.txt", "w"))) { fputs("new", f); fclose(f); }
+    prefs_migrate_dir("mig_old_", "mig_new_");
+    ASSERT_TRUE(file_has("mig_new_prefs.ini", "old"));     // moved
+    ASSERT_TRUE(!file_has("mig_old_prefs.ini", "old"));
+    ASSERT_TRUE(file_has("mig_new_library.txt", "new"));   // newer file kept
+    ASSERT_TRUE(file_has("mig_old_library.txt", "old"));   // old one left alone
+    ASSERT_TRUE(!file_has("mig_new_keymap.ini", ""));      // nothing to move, nothing made
+    remove("mig_new_prefs.ini");
+    remove("mig_new_library.txt");
+    remove("mig_old_library.txt");
+}
+
 void run_prefs_tests(void) {
+    RUN_TEST(prefs_migrate_moves_old_files_and_keeps_new_ones);
     RUN_TEST(prefs_round_trip);
     RUN_TEST(prefs_unknown_keys_survive_save);
     RUN_TEST(prefs_garbage_lines_ignored);

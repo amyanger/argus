@@ -120,7 +120,7 @@ static float type_pills(UiCanvas* c, float x, float y, const GamePartyMon* m) {
 
 static void footer(UiCanvas* c, float right) {
     ui_text(c, UI_FONT_REGULAR, 12.0f, right, (float)CARD_H - 32.0f, 0, UI_ALIGN_RIGHT, UI_FAINT,
-            "GBA Emulator \xC2\xB7 Pok\xC3\xA9mon Companion");
+            "Argus \xC2\xB7 Pok\xC3\xA9mon Companion");
 }
 
 static void play_time(const TrainerCardData* d, char* out, size_t n) {

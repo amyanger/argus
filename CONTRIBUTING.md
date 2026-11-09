@@ -34,8 +34,8 @@ Then run the golden-frame checks:
 
 ```bash
 tools/fetch_test_roms.sh roms
-for g in tests/golden/{jsmolka,tonc}_*.hash; do n=$(basename $g .hash); tools/check_golden.sh build/gba_emulator roms/$n.gba $g | tail -1; done
-for n in timing timers timer_irq dma; do tools/check_golden.sh build/gba_emulator roms/mgba_suite.gba tests/golden/mgba_suite_$n.hash "" tests/golden/mgba_suite_$n.input | tail -1; done
+for g in tests/golden/{jsmolka,tonc}_*.hash; do n=$(basename $g .hash); tools/check_golden.sh build/argus roms/$n.gba $g | tail -1; done
+for n in timing timers timer_irq dma; do tools/check_golden.sh build/argus roms/mgba_suite.gba tests/golden/mgba_suite_$n.hash "" tests/golden/mgba_suite_$n.input | tail -1; done
 ```
 
 CI runs all of this on Linux, macOS and Windows, plus ASan/UBSan and the Rust tests. A PR can only be merged once CI is green.

@@ -1,4 +1,4 @@
-# GBA Emulator
+# Argus
 
 [![CI](https://github.com/amyanger/gba-emulator/actions/workflows/ci.yml/badge.svg)](https://github.com/amyanger/gba-emulator/actions/workflows/ci.yml)
 [![Release](https://github.com/amyanger/gba-emulator/actions/workflows/release.yml/badge.svg?event=push)](https://github.com/amyanger/gba-emulator/actions/workflows/release.yml)
@@ -39,14 +39,14 @@ Not sure which Mac you have? Click the Apple menu > **About This Mac**. If it sa
 > **Your computer may warn you the app is unsafe or could be malware.** This is expected. Apple and Microsoft show this for any app whose developer hasn't paid for a signing certificate, which most free hobby projects haven't. It doesn't mean a virus was found. The steps below show how to tell your computer you trust it. You only have to do it once.
 
 **Mac**
-1. Open the `.dmg` you downloaded and drag **GBA Emulator** into **Applications**.
-2. Double-click **GBA Emulator** in Applications. macOS will refuse to open it, with a message like *"GBA Emulator" Not Opened: Apple could not verify "GBA Emulator" is free of malware*. Click **Done** (not **Move to Trash**).
-3. Open **System Settings > Privacy & Security** and scroll down to the **Security** section. You'll see *"GBA Emulator" was blocked to protect your Mac*. Click **Open Anyway**.
+1. Open the `.dmg` you downloaded and drag **Argus** into **Applications**.
+2. Double-click **Argus** in Applications. macOS will refuse to open it, with a message like *"Argus" Not Opened: Apple could not verify "Argus" is free of malware*. Click **Done** (not **Move to Trash**).
+3. Open **System Settings > Privacy & Security** and scroll down to the **Security** section. You'll see *"Argus" was blocked to protect your Mac*. Click **Open Anyway**.
 4. Double-click the app again. Click **Open Anyway** once more, and type your Mac password if asked. From now on it opens normally.
 
 **Windows**
 1. Right-click the `.zip` you downloaded and choose **Extract All**. The app won't run from inside the zip.
-2. Open the extracted folder, then the `bin` folder, and double-click `gba_emulator.exe`.
+2. Open the extracted folder, then the `bin` folder, and double-click `argus.exe`.
 3. If a blue box says *Windows protected your PC*, click **More info**, then **Run anyway**.
 4. Your browser or antivirus may also flag the download as uncommon or unsafe. In Edge or Chrome, open the downloads list, click the **...** next to the file and choose **Keep**.
 
@@ -136,7 +136,7 @@ These need the original, unmodified US/English ROM of Pokémon Emerald, FireRed 
 Open the app and pick a game from the library, or run it from a terminal:
 
 ```bash
-./build/gba_emulator path/to/rom.gba --scale 3
+./build/argus path/to/rom.gba --scale 3
 ```
 
 | Key | GBA button |

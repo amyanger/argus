@@ -413,8 +413,8 @@ The mGBA suite is menu driven, so each of its goldens has an input script (`test
 
 ```bash
 tools/fetch_test_roms.sh roms
-for g in tests/golden/{jsmolka,tonc}_*.hash; do n=$(basename $g .hash); tools/check_golden.sh build/gba_emulator roms/$n.gba $g | tail -1; done
-for n in timing timers timer_irq dma; do tools/check_golden.sh build/gba_emulator roms/mgba_suite.gba tests/golden/mgba_suite_$n.hash "" tests/golden/mgba_suite_$n.input | tail -1; done
+for g in tests/golden/{jsmolka,tonc}_*.hash; do n=$(basename $g .hash); tools/check_golden.sh build/argus roms/$n.gba $g | tail -1; done
+for n in timing timers timer_irq dma; do tools/check_golden.sh build/argus roms/mgba_suite.gba tests/golden/mgba_suite_$n.hash "" tests/golden/mgba_suite_$n.input | tail -1; done
 ```
 
 `check_golden.sh <emulator> <rom> <golden> [frames] [input-script]` runs the frame count from the golden unless you pass one, and `""` keeps that default while giving an input script. Don't regenerate a golden to make a failing check pass: a mismatch means the rendered output changed and needs a look first.
@@ -425,14 +425,14 @@ for n in timing timers timer_irq dma; do tools/check_golden.sh build/gba_emulato
 2. Bake the golden hash from a clean Release build:
    ```bash
    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-   cmake --build build --target gba_emulator
-   build/gba_emulator path/to/rom.gba \
+   cmake --build build --target argus
+   build/argus path/to/rom.gba \
        --headless --frames 240 --hash-out tests/golden/<name>.hash
    ```
 3. Manually verify the ROM actually renders correctly. Interactive mode
-   is the simplest way (`./gba_emulator path/to/rom.gba`).
+   is the simplest way (`./argus path/to/rom.gba`).
 4. Add a new step in `.github/workflows/ci.yml`'s `golden-frame` job
-   calling `tools/check_golden.sh build/gba_emulator
+   calling `tools/check_golden.sh build/argus
    /tmp/gba-test-roms/<rom>.gba tests/golden/<name>.hash`.
 5. Commit the new `.hash` file and CI step together so they land in the
    same change.
@@ -447,7 +447,7 @@ in CI, so the check runs locally and skips cleanly when the ROM is
 absent:
 
 ```bash
-tools/smoke_emerald.sh              # uses build/gba_emulator + roms/emerald.gba
+tools/smoke_emerald.sh              # uses build/argus + roms/emerald.gba
 tools/smoke_cheats.sh               # a CodeBreaker code on a temp copy of the save
 ```
 
@@ -463,7 +463,7 @@ reads it back with `--game-dump`, and checks that the save was backed up first.
 | `tools/fetch_test_roms.sh` | Downloads the pinned public test ROMs |
 | `tools/smoke_emerald.sh` | Emerald boot check against `tests/golden/emerald.hash` (local only) |
 | `tools/smoke_cheats.sh` | End-to-end cheat check on Emerald (local only) |
-| `tools/make_mac_app.sh` | Makes a double-clickable `GBA Emulator.app` (on the Desktop by default) that rebuilds from this repo on every launch |
+| `tools/make_mac_app.sh` | Makes a double-clickable `Argus.app` (on the Desktop by default) that rebuilds from this repo on every launch |
 | `tools/check_mac_bundle.sh` | Checks that a release `.app` is self-contained and targets macOS 11 |
 | `tools/fetch_sdl2_framework.sh` | Downloads the pinned SDL2 framework for macOS release bundles |
 | `tools/make_appimage.sh` | Packs a Linux build into an AppImage with SDL2 bundled |

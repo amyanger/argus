@@ -1,5 +1,5 @@
 #!/bin/bash
-# Creates a double-clickable "GBA Emulator.app" (default: on the Desktop).
+# Creates a double-clickable "Argus.app" (default: on the Desktop).
 # The app rebuilds the emulator from this repo on every launch, so it always
 # runs the latest code, then opens the emulator's game library (roms/ the first time).
 #
@@ -8,7 +8,7 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="${1:-$HOME/Desktop}"
-APP="$DEST/GBA Emulator.app"
+APP="$DEST/Argus.app"
 
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
@@ -18,8 +18,8 @@ cat > "$APP/Contents/Info.plist" <<'EOF'
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleName</key><string>GBA Emulator</string>
-    <key>CFBundleIdentifier</key><string>local.gba-emulator.launcher</string>
+    <key>CFBundleName</key><string>Argus</string>
+    <key>CFBundleIdentifier</key><string>local.argus.launcher</string>
     <key>CFBundleExecutable</key><string>launch</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>CFBundlePackageType</key><string>APPL</string>
@@ -36,12 +36,12 @@ cat > "$APP/Contents/MacOS/launch" <<EOF
 #!/bin/bash
 REPO="$REPO"
 BUILD="\$REPO/cmake-build-release"
-LOGDIR="\$HOME/Library/Logs/GBA Emulator"
+LOGDIR="\$HOME/Library/Logs/Argus"
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/sbin:\$PATH"
 mkdir -p "\$LOGDIR"
 
 alert() {
-    osascript -e "display alert \"GBA Emulator\" message \"\$1\" as critical" >/dev/null
+    osascript -e "display alert \"Argus\" message \"\$1\" as critical" >/dev/null
 }
 
 if [ ! -d "\$REPO" ]; then
@@ -49,11 +49,11 @@ if [ ! -d "\$REPO" ]; then
     exit 1
 fi
 
-osascript -e 'display notification "Building latest code..." with title "GBA Emulator"'
+osascript -e 'display notification "Building latest code..." with title "Argus"'
 if ! { cmake -S "\$REPO" -B "\$BUILD" -DCMAKE_BUILD_TYPE=Release &&
-       cmake --build "\$BUILD" --target gba_emulator -j "\$(sysctl -n hw.ncpu)"; } \\
+       cmake --build "\$BUILD" --target argus -j "\$(sysctl -n hw.ncpu)"; } \\
        > "\$LOGDIR/build.log" 2>&1; then
-    alert "Build failed. Details are in ~/Library/Logs/GBA Emulator/build.log"
+    alert "Build failed. Details are in ~/Library/Logs/Argus/build.log"
     open -a Console "\$LOGDIR/build.log"
     exit 1
 fi
@@ -62,7 +62,7 @@ fi
 ARGS=(--scale 3 --library-folder "\$REPO/roms")
 [ -f "\$REPO/bios/gba_bios.bin" ] && ARGS+=(--bios "\$REPO/bios/gba_bios.bin")
 cd "\$REPO"
-exec "\$BUILD/gba_emulator" "\${ARGS[@]}" 2> "\$LOGDIR/emulator.log"
+exec "\$BUILD/argus" "\${ARGS[@]}" 2> "\$LOGDIR/emulator.log"
 EOF
 
 chmod +x "$APP/Contents/MacOS/launch"

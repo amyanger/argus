@@ -119,7 +119,7 @@ void run_sio_link_tests(void);
 #define RUN_SUITE(fn) do { printf(">> " #fn "\n"); fflush(stdout); fn(); } while (0)
 
 int main(void) {
-    printf("=== GBA Emulator Test Suite ===\n\n");
+    printf("=== Argus Test Suite ===\n\n");
     RUN_SUITE(run_savestate_tests);
     RUN_SUITE(run_bus_tests);
     RUN_SUITE(run_cpu_tests);

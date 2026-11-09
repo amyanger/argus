@@ -36,7 +36,7 @@ void frontend_set_hints(void) {
     SDL_SetHint(SDL_HINT_WINDOWS_DPI_SCALING, "1");
 #endif
 #ifdef _WIN32
-    /* Use the exe's icon resource (ID 1, res/gba_emulator.rc) for the window. */
+    /* Use the exe's icon resource (ID 1, res/argus.rc) for the window. */
     SDL_SetHint(SDL_HINT_WINDOWS_INTRESOURCE_ICON, "1");
     SDL_SetHint(SDL_HINT_WINDOWS_INTRESOURCE_ICON_SMALL, "1");
 #endif
@@ -59,7 +59,7 @@ bool frontend_init(Frontend* fe, int scale) {
     }
 
     fe->scale = scale;
-    fe->window = SDL_CreateWindow("GBA Emulator", SDL_WINDOWPOS_CENTERED,
+    fe->window = SDL_CreateWindow("Argus", SDL_WINDOWPOS_CENTERED,
                                   SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH * scale,
                                   SCREEN_HEIGHT * scale,
                                   SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);

@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
-Name=GBA Emulator
+Name=Argus
 Comment=Game Boy Advance emulator
-Exec=gba_emulator %f
-Icon=gba_emulator
+Exec=argus %f
+Icon=argus
 Terminal=false
 Categories=Game;Emulator;
 MimeType=application/x-gba-rom;
-StartupWMClass=gba_emulator
+StartupWMClass=argus

@@ -1,13 +1,13 @@
 #!/bin/bash
-# Fails unless a built "GBA Emulator.app" is self-contained: SDL2 comes from
+# Fails unless a built "Argus.app" is self-contained: SDL2 comes from
 # inside the bundle, nothing points at Homebrew, it targets macOS 11, the
 # signature verifies, and the plist declares .gba files.
-# Usage: tools/check_mac_bundle.sh "<path>/GBA Emulator.app" [rom.gba]
+# Usage: tools/check_mac_bundle.sh "<path>/Argus.app" [rom.gba]
 set -euo pipefail
 
 APP="$1"
 ROM="${2:-}"
-BIN="$APP/Contents/MacOS/GBA Emulator"
+BIN="$APP/Contents/MacOS/Argus"
 fail() { echo "FAIL: $*"; exit 1; }
 
 [ -x "$BIN" ] || fail "missing executable $BIN"

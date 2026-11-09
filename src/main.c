@@ -463,6 +463,20 @@ static void print_usage(const char* prog) {
     printf("  --trace-frames <n>     Stop tracing after n frames\n");
 }
 
+/* v0.15.1 and older kept settings in a "GBA Emulator" folder next to "Argus". */
+static void migrate_pref_dir(void) {
+    char* dir = SDL_GetPrefPath("", "Argus");
+    if (!dir) return;
+    size_t len = strlen(dir), tail = sizeof("Argus");  // name plus trailing separator
+    char old_dir[PREFS_PATH_LEN];
+    if (len > tail && strncmp(dir + len - tail, "Argus", tail - 1) == 0) {
+        int n = snprintf(old_dir, sizeof(old_dir), "%.*sGBA Emulator%c", (int)(len - tail), dir,
+                         dir[len - 1]);
+        if (n > 0 && (size_t)n < sizeof(old_dir)) prefs_migrate_dir(old_dir, dir);
+    }
+    SDL_free(dir);
+}
+
 int main(int argc, char* argv[]) {
     bool console_hidden = rom_picker_hide_console();
 
@@ -756,6 +770,7 @@ int main(int argc, char* argv[]) {
         LOG_ERROR("--headless needs a ROM");
         return 1;
     }
+    if (!headless) migrate_pref_dir();
 
     /* The library runs in the game window, so the window opens before the ROM loads. */
     Frontend fe;
@@ -799,7 +814,7 @@ int main(int argc, char* argv[]) {
     /* Prefs load before the BIOS so a saved BIOS file can apply. Headless never touches the user's prefs. */
     if (!headless) {
         char prefs_path[PREFS_PATH_LEN] = "";
-        char* pref_dir = SDL_GetPrefPath("", "GBA Emulator");
+        char* pref_dir = SDL_GetPrefPath("", "Argus");
         if (pref_dir) {
             int n = snprintf(prefs_path, sizeof(prefs_path), "%sprefs.ini", pref_dir);
             if (n < 0 || (size_t)n >= sizeof(prefs_path)) prefs_path[0] = '\0';

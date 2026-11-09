@@ -32,7 +32,7 @@ table below in the same change.
 Re-check one locally:
 
 ```bash
-tools/check_golden.sh build/gba_emulator roms/mgba_suite.gba \
+tools/check_golden.sh build/argus roms/mgba_suite.gba \
     tests/golden/mgba_suite_dma.hash "" tests/golden/mgba_suite_dma.input
 ```
 

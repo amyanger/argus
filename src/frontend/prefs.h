@@ -27,4 +27,8 @@ bool prefs_get_bool(const Prefs* p, const char* key, bool fallback);
 bool prefs_set(Prefs* p, const char* key, const char* val);  /* false when full, too long or has '=' / newline */
 bool prefs_set_bool(Prefs* p, const char* key, bool v);
 
+/* Moves prefs.ini, keymap.ini and library.txt from old_dir to new_dir, skipping
+ * any file new_dir already has. Both dirs end in a separator, like SDL_GetPrefPath. */
+void prefs_migrate_dir(const char* old_dir, const char* new_dir);
+
 #endif // PREFS_H

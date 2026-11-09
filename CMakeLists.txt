@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(gba_emulator
+project(argus
     VERSION 0.15.1
     DESCRIPTION "Game Boy Advance emulator (ARM7TDMI + scanline PPU + SDL2)"
     LANGUAGES C
@@ -38,9 +38,9 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif()
 
-# Release-only: build "GBA Emulator.app" against an official SDL2.framework
+# Release-only: build "Argus.app" against an official SDL2.framework
 # (tools/fetch_sdl2_framework.sh). Off by default so dev builds stay at
-# build/gba_emulator for the goldens and scripts.
+# build/argus for the goldens and scripts.
 option(MACOS_APP_BUNDLE "Build a macOS .app bundle for release packaging" OFF)
 set(MACOS_SDL2_FRAMEWORK "" CACHE PATH "SDL2.framework to bundle (MACOS_APP_BUNDLE only)")
 
@@ -286,43 +286,43 @@ add_custom_command(
     VERBATIM)
 add_custom_target(hgss_rs DEPENDS "${HGSS_RS_LIB}")
 
-add_executable(gba_emulator ${SOURCES})
+add_executable(argus ${SOURCES})
 # GBA (with its cheat tables) lives on main's stack; Windows defaults to 1 MB.
 if(MSVC)
-    target_link_options(gba_emulator PRIVATE /STACK:8388608)
+    target_link_options(argus PRIVATE /STACK:8388608)
 endif()
 
-target_include_directories(gba_emulator PRIVATE
+target_include_directories(argus PRIVATE
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/include
     ${SDL2_INCLUDE_DIRS}
 )
 
-target_link_libraries(gba_emulator PRIVATE ${SDL2_LIBRARIES} $<$<NOT:$<PLATFORM_ID:Windows>>:m>)
+target_link_libraries(argus PRIVATE ${SDL2_LIBRARIES} $<$<NOT:$<PLATFORM_ID:Windows>>:m>)
 
 # Native file picker for launches without a ROM argument (double-click).
 if(APPLE)
-    target_sources(gba_emulator PRIVATE src/frontend/rom_picker_mac.m src/frontend/macos_menu.m)
-    target_link_libraries(gba_emulator PRIVATE "-framework AppKit" "-framework UniformTypeIdentifiers")
+    target_sources(argus PRIVATE src/frontend/rom_picker_mac.m src/frontend/macos_menu.m)
+    target_link_libraries(argus PRIVATE "-framework AppKit" "-framework UniformTypeIdentifiers")
 elseif(WIN32)
     # .rc: exe icon. .manifest: UTF-8 code page so argv and fopen take Unicode paths.
-    target_sources(gba_emulator PRIVATE src/frontend/rom_picker_win.c
-                   res/gba_emulator.rc res/gba_emulator.manifest)
-    target_link_libraries(gba_emulator PRIVATE comdlg32 shell32 ole32)
+    target_sources(argus PRIVATE src/frontend/rom_picker_win.c
+                   res/argus.rc res/argus.manifest)
+    target_link_libraries(argus PRIVATE comdlg32 shell32 ole32)
 else()
-    target_sources(gba_emulator PRIVATE src/frontend/rom_picker_linux.c)
+    target_sources(argus PRIVATE src/frontend/rom_picker_linux.c)
 endif()
 
 if(MACOS_APP_BUNDLE)
-    set(APP_NAME "GBA Emulator")
+    set(APP_NAME "Argus")
     set_source_files_properties(res/icon/app.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    target_sources(gba_emulator PRIVATE res/icon/app.icns)
-    set_target_properties(gba_emulator PROPERTIES
+    target_sources(argus PRIVATE res/icon/app.icns)
+    set_target_properties(argus PROPERTIES
         OUTPUT_NAME "${APP_NAME}"
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/cmake/Info.plist.in"
         MACOSX_BUNDLE_BUNDLE_NAME "${APP_NAME}"
-        MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.amyanger.gba-emulator"
+        MACOSX_BUNDLE_GUI_IDENTIFIER "io.github.amyanger.argus"
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
         MACOSX_BUNDLE_ICON_FILE "app.icns"
@@ -471,7 +471,7 @@ if(MSVC)
 endif()
 
 # Both targets must agree: these change the GBA struct layout (gba.h).
-foreach(target gba_emulator gba_tests)
+foreach(target argus gba_tests)
     if(ENABLE_XRAY)
         target_compile_definitions(${target} PRIVATE ENABLE_XRAY)
     endif()
@@ -480,7 +480,7 @@ foreach(target gba_emulator gba_tests)
     endif()
 endforeach()
 
-foreach(target gba_emulator gba_tests)
+foreach(target argus gba_tests)
     add_dependencies(${target} hgss_rs)
     target_link_libraries(${target} PRIVATE "${HGSS_RS_LIB}")
 endforeach()
@@ -492,7 +492,7 @@ include(GNUInstallDirs)
 
 if(MACOS_APP_BUNDLE)
     set(APP_DIR "${APP_NAME}.app")
-    install(TARGETS gba_emulator BUNDLE DESTINATION .)
+    install(TARGETS argus BUNDLE DESTINATION .)
     install(DIRECTORY "${MACOS_SDL2_FRAMEWORK}" DESTINATION "${APP_DIR}/Contents/Frameworks"
             USE_SOURCE_PERMISSIONS)
     install(FILES ${CMAKE_SOURCE_DIR}/LICENSE ${CMAKE_SOURCE_DIR}/fonts/Inter-LICENSE.txt
@@ -501,7 +501,7 @@ if(MACOS_APP_BUNDLE)
     # framework invalidated the linker's ad-hoc signature.
     install(CODE "execute_process(COMMAND codesign --force --deep --sign - \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${APP_DIR}\" COMMAND_ERROR_IS_FATAL ANY)")
 else()
-    install(TARGETS gba_emulator
+    install(TARGETS argus
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     )
 
@@ -509,7 +509,7 @@ else()
     # end users don't need a separate SDL2 install. TARGET_RUNTIME_DLLS resolves
     # to the imported SHARED targets the binary links against. Requires CMake 3.21+.
     if(WIN32)
-        install(FILES $<TARGET_RUNTIME_DLLS:gba_emulator>
+        install(FILES $<TARGET_RUNTIME_DLLS:argus>
             DESTINATION ${CMAKE_INSTALL_BINDIR}
         )
     endif()
@@ -522,7 +522,7 @@ else()
     )
 endif()
 
-set(CPACK_PACKAGE_NAME "gba_emulator")
+set(CPACK_PACKAGE_NAME "argus")
 set(CPACK_PACKAGE_VENDOR "amyanger")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
@@ -538,7 +538,7 @@ endif()
 if(MACOS_APP_BUNDLE)
     set(CPACK_GENERATOR "DragNDrop")
     set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-macOS-arm64")
-    set(CPACK_DMG_VOLUME_NAME "GBA Emulator")
+    set(CPACK_DMG_VOLUME_NAME "Argus")
     # No click-through license on mount (and udifrez is gone on new macOS).
     set(CPACK_DMG_SLA_USE_RESOURCE_FILE_LICENSE OFF)
 endif()

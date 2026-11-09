@@ -92,3 +92,19 @@ bool prefs_set(Prefs* p, const char* key, const char* val) {
 }
 
 bool prefs_set_bool(Prefs* p, const char* key, bool v) { return prefs_set(p, key, v ? "1" : "0"); }
+
+void prefs_migrate_dir(const char* old_dir, const char* new_dir) {
+    static const char* const names[] = {"prefs.ini", "keymap.ini", "library.txt"};
+    for (size_t i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
+        char src[PREFS_PATH_LEN], dst[PREFS_PATH_LEN];
+        int a = snprintf(src, sizeof(src), "%s%s", old_dir, names[i]);
+        int b = snprintf(dst, sizeof(dst), "%s%s", new_dir, names[i]);
+        if (a < 0 || (size_t)a >= sizeof(src) || b < 0 || (size_t)b >= sizeof(dst)) continue;
+        FILE* f = fopen(dst, "r");
+        if (f) {  // POSIX rename would overwrite newer settings
+            fclose(f);
+            continue;
+        }
+        rename(src, dst);  // fails harmlessly when the old file doesn't exist
+    }
+}

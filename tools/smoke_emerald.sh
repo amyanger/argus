@@ -7,7 +7,7 @@
 # Usage: tools/smoke_emerald.sh [emulator] [rom]
 set -euo pipefail
 
-EMU="${1:-build/gba_emulator}"
+EMU="${1:-build/argus}"
 ROM="${2:-roms/emerald.gba}"
 GOLDEN="$(dirname "$0")/../tests/golden/emerald.hash"
 

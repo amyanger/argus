@@ -19,7 +19,7 @@ jobs:
             asset_suffix: linux-x86_64
             install: sudo apt-get update && sudo apt-get install -y libsdl2-dev xvfb zsync
             cmake_extra: ""
-            artifact_glob: build/gba_emulator-*.AppImage*
+            artifact_glob: build/argus-*.AppImage*
           - os: macos-latest
             asset_suffix: macos-arm64
             install: echo "SDL2 comes from the official framework"
@@ -29,13 +29,13 @@ jobs:
               -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
               -DCMAKE_OSX_ARCHITECTURES=arm64
             cpack_generator: DragNDrop
-            artifact_glob: build/gba_emulator-*.dmg
+            artifact_glob: build/argus-*.dmg
           - os: windows-latest
             asset_suffix: windows-x86_64
             install: vcpkg install sdl2:x64-windows
             cmake_extra: -DCMAKE_TOOLCHAIN_FILE=$VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows -A x64
             cpack_generator: ZIP
-            artifact_glob: build/gba_emulator-*.zip
+            artifact_glob: build/argus-*.zip
 
     runs-on: ${{ matrix.os }}
 
@@ -57,7 +57,7 @@ jobs:
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmake_extra }}
 
       - name: Build emulator
-        run: cmake --build build --target gba_emulator --config Release -j
+        run: cmake --build build --target argus --config Release -j
 
       - name: Build tests
         run: cmake --build build --target gba_tests --config Release -j
@@ -76,7 +76,7 @@ jobs:
           # wrong path or crash leaves no such line and fails the step.
           mkdir -p "build/Pokémon Roms"
           printf 'x%.0s' $(seq 1 192) > "build/Pokémon Roms/tiny.gba"
-          ./build/Release/gba_emulator.exe "build/Pokémon Roms/tiny.gba" --headless --frames 1 2>&1 | tee smoke.log || true
+          ./build/Release/argus.exe "build/Pokémon Roms/tiny.gba" --headless --frames 1 2>&1 | tee smoke.log || true
           if ! grep -q "ROM loaded:" smoke.log; then echo "Unicode path failed to open"; exit 1; fi
 
       - name: Package
@@ -89,30 +89,30 @@ jobs:
         run: |
           MNT=$(mktemp -d)
           trap 'hdiutil detach "$MNT" || true' EXIT
-          hdiutil attach -nobrowse -readonly -mountpoint "$MNT" build/gba_emulator-*.dmg
+          hdiutil attach -nobrowse -readonly -mountpoint "$MNT" build/argus-*.dmg
           printf 'x%.0s' $(seq 1 192) > "$RUNNER_TEMP/tiny.gba"
-          tools/check_mac_bundle.sh "$MNT/GBA Emulator.app" "$RUNNER_TEMP/tiny.gba"
+          tools/check_mac_bundle.sh "$MNT/Argus.app" "$RUNNER_TEMP/tiny.gba"
 
       - name: Build AppImage (Linux)
         if: runner.os == 'Linux'
         run: |
           VERSION=$(grep -m1 -oE 'VERSION [0-9]+\.[0-9]+\.[0-9]+' CMakeLists.txt | cut -d' ' -f2)
-          tools/make_appimage.sh build/gba_emulator "$VERSION" build
+          tools/make_appimage.sh build/argus "$VERSION" build
 
       - name: Check AppImage (Linux)
         if: runner.os == 'Linux'
         run: |
-          APPIMAGE=$(realpath build/gba_emulator-*-x86_64.AppImage)
+          APPIMAGE=$(realpath build/argus-*-x86_64.AppImage)
           chmod +x "$APPIMAGE"
           "$APPIMAGE" --appimage-updateinformation | tee update.log
           grep -q "^gh-releases-zsync|amyanger|gba-emulator|latest|" update.log
           (cd "$RUNNER_TEMP" && "$APPIMAGE" --appimage-extract >/dev/null)
-          ldd "$RUNNER_TEMP/squashfs-root/usr/bin/gba_emulator" | tee ldd.log
+          ldd "$RUNNER_TEMP/squashfs-root/usr/bin/argus" | tee ldd.log
           grep -q "libSDL2.*squashfs-root" ldd.log || { echo "SDL2 not bundled"; exit 1; }
           # No zenity/kdialog on PATH and no display: must exit 0 quickly, not hang.
           rc=0
           SDL_VIDEODRIVER=dummy timeout 20 env PATH=/usr/bin/nonexistent \
-            "$RUNNER_TEMP/squashfs-root/usr/bin/gba_emulator" || rc=$?
+            "$RUNNER_TEMP/squashfs-root/usr/bin/argus" || rc=$?
           echo "exit $rc"
           test "$rc" -eq 0
           # On a real display the library window must stay open (AppImageHub's test).
@@ -124,7 +124,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: gba_emulator-${{ matrix.asset_suffix }}
+          name: argus-${{ matrix.asset_suffix }}
           path: ${{ matrix.artifact_glob }}
           if-no-files-found: error
 

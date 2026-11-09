@@ -8,7 +8,7 @@
 # Usage: tools/smoke_cheats.sh [emulator] [rom] [save]
 set -euo pipefail
 
-EMU="${1:-build/gba_emulator}"
+EMU="${1:-build/argus}"
 ROM="${2:-roms/emerald.gba}"
 SAV="${3:-${ROM}.sav}"
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Packs a Linux build into a single-file AppImage with SDL2 bundled.
 # Downloads pinned linuxdeploy/appimagetool (checked by SHA-256). Needs zsyncmake (zsync package).
-# Usage: tools/make_appimage.sh <gba_emulator binary> <version> <out dir>
+# Usage: tools/make_appimage.sh <argus binary> <version> <out dir>
 set -euo pipefail
 
 BIN="$1"
@@ -26,18 +26,18 @@ chmod +x "$WORK/linuxdeploy" "$WORK/appimagetool"
 export APPIMAGE_EXTRACT_AND_RUN=1
 
 # linuxdeploy wants the icon file named after the desktop entry's Icon= key.
-cp "$REPO/res/icon/app.png" "$WORK/gba_emulator.png"
+cp "$REPO/res/icon/app.png" "$WORK/argus.png"
 "$WORK/linuxdeploy" --appdir "$WORK/AppDir" \
     --executable "$BIN" \
-    --desktop-file "$REPO/res/gba_emulator.desktop" \
-    --icon-file "$WORK/gba_emulator.png"
-mkdir -p "$WORK/AppDir/usr/share/doc/gba_emulator"
-cp "$REPO/LICENSE" "$REPO/fonts/Inter-LICENSE.txt" "$WORK/AppDir/usr/share/doc/gba_emulator/"
+    --desktop-file "$REPO/res/argus.desktop" \
+    --icon-file "$WORK/argus.png"
+mkdir -p "$WORK/AppDir/usr/share/doc/argus"
+cp "$REPO/LICENSE" "$REPO/fonts/Inter-LICENSE.txt" "$WORK/AppDir/usr/share/doc/argus/"
 
 # Update info lets AppImageUpdate fetch the latest release; appimagetool
 # makes the matching .zsync (needs zsyncmake on PATH), moved next to the AppImage.
-UPDATE_INFO="gh-releases-zsync|amyanger|gba-emulator|latest|gba_emulator-*-x86_64.AppImage.zsync"
-APPIMAGE="$OUT/gba_emulator-$VERSION-x86_64.AppImage"
+UPDATE_INFO="gh-releases-zsync|amyanger|gba-emulator|latest|argus-*-x86_64.AppImage.zsync"
+APPIMAGE="$OUT/argus-$VERSION-x86_64.AppImage"
 mkdir -p "$OUT"
 ARCH=x86_64 VERSION="$VERSION" "$WORK/appimagetool" -u "$UPDATE_INFO" "$WORK/AppDir" "$APPIMAGE"
 ZSYNC="$(basename "$APPIMAGE").zsync" # zsyncmake writes it to the current directory
